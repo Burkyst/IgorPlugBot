@@ -1,6 +1,6 @@
 var IPB = {
 	misc: {
-		commands: "IgorPlugBot Commands: http://bit.ly/1Q3suDj",
+		commands: "IgorPlugBot Commands: https://github.com/9Igorce/IgorPlugBot/blob/master/README.md",
 		regras: "",
 		versao: "V1.3.8",
 		facebook: null,
@@ -330,7 +330,7 @@ var IPB = {
 					clearTimeout(IPB.timeouts.lotSelect);
 					IPB.settings.lotWinners.length = 0;
 					++IPB.settings.lot;
-						API.moderateMoveDJ(data.uid, 1);
+						API.moderateMoveDJ(data.uid, 5);
 						API.sendChat('[' + data.un + '] Movendo o ganhador da loteria para a posição 1.');
 				}
 			}
@@ -397,6 +397,13 @@ function StartUp(){
 	API.on(API.ADVANCE, IPB.tools.adv);
     IPB.settings.globCounter = (new Date).getMinutes();
     IPB.tools.globCounter();
+}
+
+API.moderateDeleteChat = function(cid){
+	$.ajax({
+		url: 'https://stg.plug.dj/chat/' + cid,
+		type: 'DELETE'
+	})
 }
 
 StartUp();
