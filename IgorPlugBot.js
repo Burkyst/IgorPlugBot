@@ -90,7 +90,7 @@ var IPB = {
 					genre = song.genre,
 					fc = IPB.tools.formatNumber(song.favoritings_count),
 					pc = IPB.tools.formatNumber(song.playback_count),
-					username = song.user.username,
+					username = song.username,
 					dc = IPB.tools.formatNumber(song.download_count);
 				
 				IPB.misc.songURL = song.permalink_url;
@@ -103,6 +103,11 @@ var IPB = {
 				break;
 			}
 		},
+		 getUserByName: function(name){
+        		for(var i in API.getUsers()) {
+            			if (API.getUsers()[i].username === name.trim()) return API.getUsers()[i].id;
+        		}
+    		},
 		globCounter: function() {
 			IPB.intervals.globCounter = setInterval(function () {
 				IPB.settings.globCounter++;
@@ -116,11 +121,11 @@ var IPB = {
 			r = e[Math.floor(Math.random() * t)];
 
 			if (r) {
-				var user = API.getUser(r.userid);
-				IPB.settings.lotWinners.push(user.userid);
-				IPB.settings.lotWinner = user.userid;
+				var user = API.getUser(r.id);
+				IPB.settings.lotWinners.push(user.id);
+				IPB.settings.lotWinner = user.id;
 				IPB.timeouts.lotSelect = setTimeout(IPB.tools.boostLottery, 1e3 * 120);
-				API.sendChat("@" + user.username + ' Você ganhou a loteria! Antes de 2 minutos, digite !lottery para ser movido a posição 1. Caso o contrário, será sorteado outro usuário.');
+				API.sendChat("@" + user.un + ' Você ganhou a loteria! Antes de 2 minutos, digite !lottery para ser movido a posição 1. Caso o contrário, será sorteado outro usuário.');
 			} else API.sendChat("Infelizmente, ninguem estava possibilitado para ganhar a loteria!( ou alguma coisa ruim aconteceu!) Será sorteado um novo ganhador, então fique ativo no chat!")
 		},
 		save: function() {
@@ -185,8 +190,8 @@ var IPB = {
 		mute: function(data, split){
 			if(API.getUser(data.uid).role >= 2 || IPB.settings.admins.indexOf(data.uid) > -1){
 				var name = data.message.substring(7);
-				var user1 = API.getUser(data.uid).role;
-				var user2 = API.getUserByName(name).role;
+				var user1 = API.getUser(data.uid).role || IPB.settings.admin.indexOf(data.uid) > -1;
+				var user2 = IPB.tools.getUserByName(name).role || IPB.settings.admin.indexOf(data.uid) > -1;
 				if(user1 > user2){
 					if(IPB.settings.usersMute.indexOf(name) > -1){
 					   API.sendChat('[' + data.un + '] Usuario já está mutado.');
@@ -214,10 +219,10 @@ var IPB = {
 			} 
 		},
 		duel: function(data, split){
-			if (IPB.misc.duelReady && IPB.misc.duel[0] === undefined && API.getUserByName(data.message.substr(7)) !== data.uid){
-					if (API.getUserByName(data.message.substr(7))){
+			if (IPB.misc.duelReady && IPB.misc.duel[0] === undefined && IPB.tools.getUserByName(data.message.substr(7)) !== data.uid){
+					if (IPB.tools.getUserByName(data.message.substr(7))){
 						IPB.misc.duel.push(data.uid);
-						IPB.misc.duel.push(API.getUserByName(data.message.substr(7)).userid);
+						IPB.misc.duel.push(IPB.tools.getUserByName(data.message.substr(7)).id);
 						API.sendChat('@' + data.message.substr(7) + ', ' + data.un + '  Te chamou para o x1! Antes de dois minutos digite !accept para aceitar o x1. AVISO o perdedor ficará mutado por 2 minutos!');
 						setTimeout(function(){
 							IPB.misc.duel = [];
@@ -253,7 +258,7 @@ var IPB = {
 		},
 		lockskip: function(data, split) {
 			if(API.getUser(data.uid).role >= 2 || IPB.settings.admins.indexOf(data.uid) > -1){
-				var id = API.getDJ().userid;
+				var id = API.getDJ().id;
 				API.sendChat('[' + data.un + '] Usou Lockskip!')
 				API.moderateSkip(function(){API.moderateMoveDJ(id, 1);});
 			} else {
@@ -275,11 +280,11 @@ var IPB = {
 					pos = parseInt(data.message.substring(lastSpace + 1));
 					name = data.message.substring(7, lastSpace);
 				}
-				var user = API.getUserByName(name);
+				var user = IPB.tools.getUserByName(name);
 				if (typeof user === 'boolean') return API.sendChat('[' + data.un + '] Usuário Invalido.');
 				if (!isNaN(pos)) {
 					API.sendChat('[' + data.un + '] Movendo ' + name + ' para a posição: ' + pos + '.');
-					API.moderateMoveDJ(user.userid, pos);
+					API.moderateMoveDJ(user.id, pos);
 				} else return API.sendChat('[' + data.un + '] Posição Invalida!');
 			} else {
 				API.sendChat('@' + data.un + ' Você não tem permissão para usar este comando!');
