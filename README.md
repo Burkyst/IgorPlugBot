@@ -21,7 +21,7 @@ Usage
 * Copy the URL below and paste in Bookmarks:
 
 ```
-javascript:(function(){$.getScript('https://rawgit.com/9Igorce/IgorPlugBot/master/IgorPlugBot.js');}());
+javascript:(function(){$.getScript('https://raw.githack.com/Burkyst/IgorPlugBot/master/IgorPlugBot.js');}());
 ```
 
 -----------------
