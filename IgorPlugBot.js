@@ -1,6 +1,6 @@
 var IPB = {
 	misc: {
-		commands: "IgorPlugBot Commands: https://github.com/9Igorce/IgorPlugBot/blob/master/README.md",
+		commands: "Bot Commands: https://github.com/9Igorce/IgorPlugBot/blob/master/README.md",
 		regras: "",
 		versao: "V1.3.8",
 		facebook: null,
@@ -17,7 +17,7 @@ var IPB = {
 		duelDelay: 30,
 		songCounter: 0,
 		apocalyse: false,
-		admins: [3455675],
+		admins: [3455675, 20574971],
 		apoc: ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0"],		
 		lottery: true,
 		globCounter: 0,
@@ -396,7 +396,7 @@ var IPB = {
 };
 	
 function StartUp(){
-	API.sendChat('/em IgorPlugBot ' + IPB.misc.versao + ' Now Running!');
+	API.sendChat('/em PlugBot ' + IPB.misc.versao + ' Now Running!');
 
 	API.on(API.CHAT, IPB.tools.chat);		
 	API.on(API.ADVANCE, IPB.tools.adv);
